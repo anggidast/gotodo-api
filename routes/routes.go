@@ -5,6 +5,7 @@ import (
 
 	"go-fancy-todo/config"
 	"go-fancy-todo/controllers"
+	"go-fancy-todo/middlewares"
 	"go-fancy-todo/models"
 
 	"github.com/go-playground/validator/v10"
@@ -18,14 +19,20 @@ func Init() *echo.Echo { // * function yang langsung berjalan, ketika run projec
 	}
 	config.NewDB()
 
+	// * define group, with group level middleware
+	todos := e.Group("/todos", middlewares.Authentication)
+	todos.Use()
+
 	e.GET("/", func(c echo.Context) error { // * echo.Context untuk hanlde request dan response
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.String(http.StatusOK, "Go ToDo API Connected")
 	})
-	e.GET("/todos", controllers.GetAllTodos)
-	e.GET("/todos/:id", controllers.GetTodo)
-	e.POST("/todos", controllers.AddTodo)
-	e.PUT("/todos/:id", controllers.UpdateTodo)
-	e.DELETE("/todos/:id", controllers.DeleteTodo)
+
+	// * using group
+	todos.GET("", controllers.GetAllTodos)
+	todos.GET("/:id", controllers.GetTodo)
+	todos.POST("", controllers.AddTodo)
+	todos.PUT("/:id", controllers.UpdateTodo)
+	todos.DELETE("/:id", controllers.DeleteTodo)
 
 	e.GET("/users", controllers.GetAllUsers)
 	e.POST("/login", controllers.Login)

@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
 
@@ -42,12 +43,28 @@ func Login(c echo.Context) (err error) {
 		}
 	}
 
-	response := models.UserResponse{
-		Message: "succeed",
-		Data:    models.UserInfo{ID: user.ID, Email: user.Email},
+	// ? JWT
+	// * JWT init
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	// * define payload
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = user.ID
+	claims["email"] = user.Email
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	// * generate encoded token
+	t, err := token.SignedString([]byte("privatekey"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, response)
+	// * send it as response
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "succeed",
+		"user_id": user.ID,
+		"token":   t,
+	})
 }
 
 func Register(c echo.Context) (err error) {

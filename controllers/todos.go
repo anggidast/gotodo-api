@@ -29,7 +29,9 @@ func GetTodo(c echo.Context) (err error) {
 	todo := models.Todo{}
 
 	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
+			"message": "todo not found",
+		})
 	}
 
 	return c.JSON(http.StatusOK, todo)
@@ -75,7 +77,9 @@ func UpdateTodo(c echo.Context) (err error) {
 	todo := models.Todo{}
 
 	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
+			"message": "todo not found",
+		})
 	}
 
 	req := new(models.Todo)
@@ -107,7 +111,9 @@ func DeleteTodo(c echo.Context) (err error) {
 	todo := models.Todo{}
 
 	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
+			"message": "todo not found",
+		})
 	}
 
 	db.Delete(&todo, id)
