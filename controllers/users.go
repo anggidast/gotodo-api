@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-fancy-todo/config"
 	"go-fancy-todo/helpers"
 	"go-fancy-todo/models"
@@ -27,10 +26,6 @@ func GetAllUsers(c echo.Context) (err error) {
 func Login(c echo.Context) (err error) {
 	req := new(models.User)
 
-	email := c.Request().PostFormValue("email")
-	password := c.Request().PostFormValue("password")
-	fmt.Println(email, password)
-
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -42,10 +37,14 @@ func Login(c echo.Context) (err error) {
 	user := models.User{}
 
 	if err = db.First(&user, "email = ?", req.Email).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		return echo.NewHTTPError(http.StatusForbidden, map[string]string{
+			"message": "Email is not registered",
+		})
 	} else {
 		if err = helpers.CompareHash(user.Password, req.Password); err != nil {
-			return echo.NewHTTPError(http.StatusNotFound, err.Error())
+			return echo.NewHTTPError(http.StatusForbidden, map[string]string{
+				"message": "Wrong password",
+			})
 		}
 	}
 
@@ -78,8 +77,10 @@ func Register(c echo.Context) (err error) {
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
+	// TODO fix error handler on email unique validate
 	if err = c.Validate(req); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusForbidden, err.Error())
 	}
 
 	newUser := models.User{

@@ -11,7 +11,7 @@ import (
 type (
 	User struct {
 		ID        int       `json:"id"`
-		Email     string    `json:"email" validate:"required,email"`
+		Email     string    `json:"email" validate:"required,unique,email"`
 		Password  string    `gorm:"type:varchar(255)" json:"password" validate:"required"`
 		CreatedAt time.Time `json:"createdAt" gorm:"column:createdAt"`
 		UpdatedAt time.Time `json:"updatedAt"  gorm:"column:updatedAt"`
