@@ -12,6 +12,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func dateValidation(due_date string) (err error) {
+	due, _ := time.Parse("2006-01-02", due_date)
+	today := time.Now()
+	if due.Format("2006-01-02") < today.Format("2006-01-02") {
+		err = errors.New("validation_error: Due date cannot be the day before today")
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return nil
+}
+
 func GetAllTodos(c echo.Context) (err error) {
 	db := config.NewDB()
 	todos := []models.Todo{}
@@ -26,15 +37,11 @@ func GetAllTodos(c echo.Context) (err error) {
 }
 
 func GetTodo(c echo.Context) (err error) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := c.Param("id")
 
-	db := config.NewDB()
-	todo := models.Todo{}
-
-	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
-			"message": "todo not found",
-		})
+	todo, _, _, err := middlewares.Authorization(id, c)
+	if err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, todo)
@@ -58,11 +65,8 @@ func AddTodo(c echo.Context) (err error) {
 		UpdatedAt:   time.Now(),
 	}
 
-	due, _ := time.Parse("2006-01-02", req.Due_date)
-	today := time.Now()
-	if due.Format("2006-01-02") < today.Format("2006-01-02") {
-		err = errors.New("validation_error: Due date cannot be the day before today")
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	if err = dateValidation(req.Due_date); err != nil {
+		return err
 	}
 
 	db := config.NewDB()
@@ -76,15 +80,11 @@ func AddTodo(c echo.Context) (err error) {
 }
 
 func UpdateTodo(c echo.Context) (err error) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := c.Param("id")
 
-	db := config.NewDB()
-	todo := models.Todo{}
-
-	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
-			"message": "todo not found",
-		})
+	todo, userId, db, err := middlewares.Authorization(id, c)
+	if err != nil {
+		return err
 	}
 
 	req := new(models.Todo)
@@ -92,14 +92,18 @@ func UpdateTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	var userId int = int(middlewares.UserId)
+	userIdInt, _ := strconv.Atoi(userId)
 
 	todo.Title = req.Title
 	todo.Description = req.Description
 	todo.Status = req.Status
 	todo.Due_date = req.Due_date
-	todo.UserId = userId
+	todo.UserId = userIdInt
 	todo.UpdatedAt = time.Now()
+
+	if err = dateValidation(req.Due_date); err != nil {
+		return err
+	}
 
 	db.Save(&todo)
 
@@ -112,15 +116,11 @@ func UpdateTodo(c echo.Context) (err error) {
 }
 
 func DeleteTodo(c echo.Context) (err error) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := c.Param("id")
 
-	db := config.NewDB()
-	todo := models.Todo{}
-
-	if err = db.First(&todo, id).Error; err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, map[string]string{
-			"message": "todo not found",
-		})
+	todo, _, db, err := middlewares.Authorization(id, c)
+	if err != nil {
+		return err
 	}
 
 	db.Delete(&todo, id)

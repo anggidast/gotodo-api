@@ -3,10 +3,15 @@ package middlewares
 import (
 	"errors"
 	"fmt"
+	"go-fancy-todo/config"
+	"go-fancy-todo/models"
+	"net/http"
+	"strconv"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"gorm.io/gorm"
 )
 
 var signingKey = []byte("privatekey")
@@ -14,7 +19,6 @@ var UserId float64
 
 var Authentication = middleware.JWTWithConfig(middleware.JWTConfig{
 	TokenLookup: "header:" + "access_token",
-	// Claims:      jwt.MapClaims{},
 	ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
 		keyFunc := func(t *jwt.Token) (interface{}, error) {
 			if t.Method.Alg() != "HS256" {
@@ -36,13 +40,17 @@ var Authentication = middleware.JWTWithConfig(middleware.JWTConfig{
 	},
 })
 
-// TODO get UserId from header
+func Authorization(id string, c echo.Context) (todo models.Todo, userId string, db *gorm.DB, err error) {
+	db = config.NewDB()
+	todo = models.Todo{}
 
-// func Decode(token string) {
-// 	claims := jwt.MapClaims{}
-// 	jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-// 		return []byte("<YOUR VERIFICATION KEY>"), nil
-// 	})
+	userId = strconv.Itoa(int(UserId))
 
-// 	UserId = claims["id"]
-// }
+	if err = db.First(&todo, "user_id = ? AND id = ?", userId, id).Error; err != nil {
+		return todo, userId, db, echo.NewHTTPError(http.StatusNotFound, map[string]string{
+			"message": "todo not found",
+		})
+	}
+
+	return todo, userId, db, nil
+}

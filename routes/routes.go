@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Init() *echo.Echo { // * function yang langsung berjalan, ketika run project, mereturn instance
+func Init() *echo.Echo {
 	e := echo.New()
 	e.Validator = &models.CustomValidator{
 		Validator: validator.New(),
@@ -23,7 +23,7 @@ func Init() *echo.Echo { // * function yang langsung berjalan, ketika run projec
 	todos := e.Group("/todos", middlewares.Authentication)
 	todos.Use()
 
-	e.GET("/", func(c echo.Context) error { // * echo.Context untuk hanlde request dan response
+	e.GET("/", func(c echo.Context) error { // * echo.Context for handle request and response
 		return c.String(http.StatusOK, "Go ToDo API Connected")
 	})
 

@@ -59,8 +59,6 @@ func Login(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 
-	// middlewares.Decode(t)
-
 	// * send it as response
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "succeed",
