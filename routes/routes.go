@@ -5,22 +5,17 @@ import (
 
 	"go-fancy-todo/config"
 	"go-fancy-todo/controllers"
+	"go-fancy-todo/models"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
-// var validate *validator.Validate
-
-// func (cv *models.CustomValidator) Validate(i interface{}) error {
-// 	if err := cv.validator.Struct(i); err != nil {
-// 		// Optionally, you could return the error to give each route more control over the status code
-// 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-// 	}
-// 	return nil
-// }
-
 func Init() *echo.Echo { // * function yang langsung berjalan, ketika run project, mereturn instance
 	e := echo.New()
+	e.Validator = &models.CustomValidator{
+		Validator: validator.New(),
+	}
 	config.NewDB()
 
 	e.GET("/", func(c echo.Context) error { // * echo.Context untuk hanlde request dan response

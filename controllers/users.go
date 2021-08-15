@@ -27,6 +27,9 @@ func Login(c echo.Context) (err error) {
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+	if err = c.Validate(req); err != nil {
+		return err
+	}
 
 	db := config.NewDB()
 	user := models.User{}
@@ -51,6 +54,9 @@ func Register(c echo.Context) (err error) {
 	req := new(models.User)
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err = c.Validate(req); err != nil {
+		return err
 	}
 
 	newUser := models.User{

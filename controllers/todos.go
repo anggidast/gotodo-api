@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"go-fancy-todo/config"
 	"go-fancy-todo/models"
 	"net/http"
@@ -48,6 +49,13 @@ func AddTodo(c echo.Context) (err error) {
 		UserId:      req.UserId,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
+	}
+
+	due, _ := time.Parse("2006-01-02", req.Due_date)
+	today := time.Now()
+	if due.Format("2006-01-02") < today.Format("2006-01-02") {
+		err = errors.New("validation_error: Due date cannot be the day before today")
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	db := config.NewDB()
