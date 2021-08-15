@@ -3,7 +3,6 @@ package controllers
 import (
 	"go-fancy-todo/config"
 	"go-fancy-todo/helpers"
-	"go-fancy-todo/middlewares"
 	"go-fancy-todo/models"
 	"net/http"
 	"strconv"
@@ -60,7 +59,7 @@ func Login(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 
-	middlewares.Decode(t)
+	// middlewares.Decode(t)
 
 	// * send it as response
 	return c.JSON(http.StatusOK, map[string]interface{}{

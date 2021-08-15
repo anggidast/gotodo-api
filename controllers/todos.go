@@ -16,8 +16,7 @@ func GetAllTodos(c echo.Context) (err error) {
 	db := config.NewDB()
 	todos := []models.Todo{}
 
-	// TODO get userId from header
-	var userId string = strconv.Itoa(int(middlewares.UserId.(float64)))
+	var userId string = strconv.Itoa(int(middlewares.UserId))
 
 	if err = db.Find(&todos, "user_id = ?", userId).Error; err != nil {
 		return err
@@ -47,12 +46,14 @@ func AddTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	var userId int = int(middlewares.UserId)
+
 	newTodo := models.Todo{
 		Title:       req.Title,
 		Description: req.Description,
 		Status:      "undone",
 		Due_date:    req.Due_date,
-		UserId:      req.UserId,
+		UserId:      userId,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -91,11 +92,13 @@ func UpdateTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	var userId int = int(middlewares.UserId)
+
 	todo.Title = req.Title
 	todo.Description = req.Description
 	todo.Status = req.Status
 	todo.Due_date = req.Due_date
-	todo.UserId = req.UserId
+	todo.UserId = userId
 	todo.UpdatedAt = time.Now()
 
 	db.Save(&todo)
