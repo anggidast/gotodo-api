@@ -33,7 +33,12 @@ func GetAllTodos(c echo.Context) (err error) {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, todos)
+	response := models.TodoResponse{
+		Message: "succeed",
+		Data:    todos,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func GetTodo(c echo.Context) (err error) {
@@ -44,7 +49,12 @@ func GetTodo(c echo.Context) (err error) {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, todo)
+	response := models.TodoResponse{
+		Message: "succeed",
+		Data:    todo,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func AddTodo(c echo.Context) (err error) {
@@ -104,6 +114,31 @@ func UpdateTodo(c echo.Context) (err error) {
 	if err = dateValidation(req.Due_date); err != nil {
 		return err
 	}
+
+	db.Save(&todo)
+
+	response := models.TodoResponse{
+		Message: "updated",
+		Data:    todo,
+	}
+
+	return c.JSON(http.StatusOK, response)
+}
+
+func ChangeStatus(c echo.Context) (err error) {
+	id := c.Param("id")
+
+	todo, _, db, err := middlewares.Authorization(id, c)
+	if err != nil {
+		return err
+	}
+
+	req := new(models.Todo)
+	if err = c.Bind(req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	todo.Status = req.Status
 
 	db.Save(&todo)
 

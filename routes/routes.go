@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func Init() *echo.Echo {
@@ -17,6 +18,10 @@ func Init() *echo.Echo {
 	e.Validator = &models.CustomValidator{
 		Validator: validator.New(),
 	}
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+	}))
 	config.NewDB()
 
 	// * define group, with group level middleware
@@ -32,11 +37,12 @@ func Init() *echo.Echo {
 	todos.GET("/:id", controllers.GetTodo)
 	todos.POST("", controllers.AddTodo)
 	todos.PUT("/:id", controllers.UpdateTodo)
+	todos.PATCH("/:id", controllers.ChangeStatus)
 	todos.DELETE("/:id", controllers.DeleteTodo)
 
 	e.GET("/users", controllers.GetAllUsers)
-	e.POST("/login", controllers.Login)
-	e.POST("/register", controllers.Register)
+	e.POST("/users/login", controllers.Login)
+	e.POST("/users/register", controllers.Register)
 	e.PUT("/user/:id", controllers.UpdateUser)
 	e.DELETE("/user/:id", controllers.DeleteUser)
 

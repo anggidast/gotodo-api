@@ -15,7 +15,7 @@ type (
 	}
 
 	TodoResponse struct {
-		Message string `json:"message"`
-		Data    Todo   `json:"data"`
+		Message string      `json:"message"`
+		Data    interface{} `json:"data"`
 	}
 )

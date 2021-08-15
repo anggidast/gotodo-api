@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"go-fancy-todo/config"
 	"go-fancy-todo/helpers"
 	"go-fancy-todo/models"
@@ -25,6 +26,11 @@ func GetAllUsers(c echo.Context) (err error) {
 
 func Login(c echo.Context) (err error) {
 	req := new(models.User)
+
+	email := c.Request().PostFormValue("email")
+	password := c.Request().PostFormValue("password")
+	fmt.Println(email, password)
+
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -61,9 +67,9 @@ func Login(c echo.Context) (err error) {
 
 	// * send it as response
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "succeed",
-		"user_id": user.ID,
-		"token":   t,
+		"message":      "succeed",
+		"user_id":      user.ID,
+		"access_token": t,
 	})
 }
 
