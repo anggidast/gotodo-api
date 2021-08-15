@@ -9,7 +9,7 @@ type (
 		Description string    `json:"description"`
 		Status      string    `json:"status"`
 		Due_date    string    `json:"due_date"`
-		UserId      int       `json:"UserId" gorm:"column:UserId"`
+		UserId      int       `json:"UserId" gorm:"column:user_id"`
 		CreatedAt   time.Time `json:"createdAt" gorm:"column:createdAt"`
 		UpdatedAt   time.Time `json:"updatedAt"  gorm:"column:updatedAt"`
 	}

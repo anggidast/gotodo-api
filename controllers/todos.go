@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"go-fancy-todo/config"
+	"go-fancy-todo/middlewares"
 	"go-fancy-todo/models"
 	"net/http"
 	"strconv"
@@ -15,7 +16,10 @@ func GetAllTodos(c echo.Context) (err error) {
 	db := config.NewDB()
 	todos := []models.Todo{}
 
-	if err = db.Find(&todos).Error; err != nil {
+	// TODO get userId from header
+	var userId string = strconv.Itoa(int(middlewares.UserId.(float64)))
+
+	if err = db.Find(&todos, "user_id = ?", userId).Error; err != nil {
 		return err
 	}
 
