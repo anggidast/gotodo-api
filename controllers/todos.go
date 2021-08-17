@@ -14,6 +14,7 @@ import (
 
 func dateValidation(due_date string) (err error) {
 	due, _ := time.Parse("2006-01-02", due_date)
+
 	today := time.Now()
 	if due.Format("2006-01-02") < today.Format("2006-01-02") {
 		err = errors.New("validation_error: Due date cannot be the day before today")
@@ -29,7 +30,7 @@ func GetAllTodos(c echo.Context) (err error) {
 
 	var userId string = strconv.Itoa(int(middlewares.UserId))
 
-	if err = db.Find(&todos, "user_id = ?", userId).Error; err != nil {
+	if err = db.Order("status desc, due_date desc").Find(&todos, "user_id = ?", userId).Error; err != nil {
 		return err
 	}
 
@@ -63,8 +64,9 @@ func AddTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	
 	var userId int = int(middlewares.UserId)
-
+	
 	newTodo := models.Todo{
 		Title:       req.Title,
 		Description: req.Description,
@@ -74,11 +76,13 @@ func AddTodo(c echo.Context) (err error) {
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-
+	
+	
 	if err = dateValidation(req.Due_date); err != nil {
 		return err
 	}
 
+	
 	db := config.NewDB()
 	db.Create(&newTodo)
 	response := models.TodoResponse{
@@ -106,7 +110,6 @@ func UpdateTodo(c echo.Context) (err error) {
 
 	todo.Title = req.Title
 	todo.Description = req.Description
-	todo.Status = req.Status
 	todo.Due_date = req.Due_date
 	todo.UserId = userIdInt
 	todo.UpdatedAt = time.Now()

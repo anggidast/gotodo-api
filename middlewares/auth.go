@@ -48,7 +48,7 @@ func Authorization(id string, c echo.Context) (todo models.Todo, userId string, 
 
 	if err = db.First(&todo, "user_id = ? AND id = ?", userId, id).Error; err != nil {
 		return todo, userId, db, echo.NewHTTPError(http.StatusNotFound, map[string]string{
-			"message": "todo not found",
+			"message": "Todo not found",
 		})
 	}
 

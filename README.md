@@ -1,7 +1,7 @@
 # Go Todo API Documentation
 
-| Method | Route           | Description                                  |
-| :----- | :-------------- | :------------------------------------------- |
+| Method | Route           | Description                               |
+| :----- | :-------------- | :---------------------------------------- |
 | POST   | /users/register | Create new user account to access Go Todo |
 | POST   | /users/login    | User login to access Go Todo              |
 | POST   | /todos          | Add new todo to Go Todo                   |
@@ -10,6 +10,14 @@
 | PUT    | /todos/:id      | Update all todo field in Go Todo          |
 | PATCH  | /todos/:id      | Update only todo status field in Go Todo  |
 | DELETE | /todos/:id      | Delete todo from Go Todo                  |
+
+---
+
+## Demo Account
+
+email: demo@user.com
+
+password: demouser
 
 ---
 
@@ -76,13 +84,8 @@ Create new user account to access Go Todo
 
     OR
 
-  - **Code:** 400 BAD REQUEST <br />
-    **Content:** `"message": "Password minimum character is 6"`
-
-    OR
-
-  - **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** `"message": "Internal server error`
+- **Code:** 500 INTERNAL SERVER ERROR <br />
+  **Content:** `"message": "Internal server error`
 
 - **Sample Call:**
 
@@ -161,6 +164,21 @@ Login to access Go Todo
 
     OR
 
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Email cannot be empty/null"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Email format is wrong"`
+
+    OR
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `"message": "Password cannot be empty/null"`
+
+    OR
+
   - **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `"message": "Internal server error`
 
@@ -199,6 +217,10 @@ Add new todo to Go Todo
 - **Method:**
 
   `POST`
+
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
 
 - **URL Params**: none
 
@@ -290,6 +312,10 @@ Show all todos in Go Todo
 
   `GET`
 
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
+
 - **URL Params**: none
 
 - **Data Params**: none
@@ -342,6 +368,10 @@ Show todo in Go Todo by ID
 
   `GET`
 
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
+
 - **URL Params**
 
   `/:id`
@@ -388,6 +418,10 @@ Update all todo field in Go Todo
 - **Method:**
 
   `PUT`
+
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
 
 - **URL Params**
 
@@ -459,6 +493,10 @@ Update only todo status field in Go Todo
 
   `PATCH`
 
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
+
 - **URL Params**
 
   `/:id`
@@ -525,6 +563,10 @@ Delete todo from Go Todo
 - **Method:**
 
   `DELETE`
+
+- **Authentication:**
+
+  `REQUIRED: access_token (JWT)`
 
 - **URL Params**
 
