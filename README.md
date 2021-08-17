@@ -1,5 +1,8 @@
 # Go Todo API Documentation
 
+API URL: https://gotodo-api.herokuapp.com/
+
+
 | Method | Route           | Description                               |
 | :----- | :-------------- | :---------------------------------------- |
 | POST   | /users/register | Create new user account to access Go Todo |
