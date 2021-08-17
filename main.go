@@ -1,9 +1,12 @@
 package main
 
-import "go-fancy-todo/routes"
+import (
+	"go-fancy-todo/routes"
+	"os"
+)
 
 func main() {
 	e := routes.Init()
-	
-	e.Logger.Fatal(e.Start(":8080"))
+	port := os.Getenv("PORT")	
+	e.Logger.Fatal(e.Start(":"+port))
 }
