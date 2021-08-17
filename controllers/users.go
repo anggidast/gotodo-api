@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"go-fancy-todo/config"
 	"go-fancy-todo/helpers"
 	"go-fancy-todo/models"
@@ -78,9 +79,21 @@ func Register(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	// TODO fix error handler on email unique validate
+	db := config.NewDB()
+	user := models.User{}
+
 	if err = c.Validate(req); err != nil {
-		return echo.NewHTTPError(http.StatusForbidden, err.Error())
+		return err
+	}
+
+	if err = db.First(&user, "email = ?", req.Email).Error; err == nil {
+		return echo.NewHTTPError(http.StatusForbidden, map[string]string{
+			"message": fmt.Sprintf("Email %v is already registered", req.Email),
+		})
+	}
+
+	if err = c.Validate(req); err != nil {
+		return err
 	}
 
 	newUser := models.User{
@@ -90,7 +103,6 @@ func Register(c echo.Context) (err error) {
 		UpdatedAt: time.Now(),
 	}
 
-	db := config.NewDB()
 	db.Create(&newUser)
 	response := models.UserResponse{
 		Message: "created",
