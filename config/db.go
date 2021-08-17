@@ -35,7 +35,7 @@ func GetDBType() string {
 // postgres://username:password@host/dbName
 
 func GetPostgresConnectionString() string {
-	database := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable TimeZone=Asia/Jakarta",
+	database := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=enable TimeZone=Asia/Jakarta",
 		DBHost, DBPort, DBUser, DBName, DBPassword,
 	)
 
