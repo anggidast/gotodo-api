@@ -21,7 +21,7 @@ const (
 	DBUser     = "jxwfsdrmgkodop"
 	DBPassword = "9f695dce1de225f9c1caf7d6ea1fffc9456f9f31a2108ccd3b99a310801703ba"
 	DBName     = "df3k9vvjafhfb5"
-	DBHost     = "ec2-44-196-170-156.compute-1.amazonaws.com	"
+	DBHost     = "ec2-44-196-170-156.compute-1.amazonaws.com"
 	DBPort     = "5432"
 	DBType     = "postgres"
 )
