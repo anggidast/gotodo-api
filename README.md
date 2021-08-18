@@ -1,11 +1,6 @@
 # Go Todo API Documentation
 
-<<<<<<< HEAD
-API link: https://gotodo-api.herokuapp.com/
-=======
 API URL: https://gotodo-api.herokuapp.com/
-
->>>>>>> 23e3b5dace397776aadf3c77ee68539feecebe19
 
 | Method | Route           | Description                               |
 | :----- | :-------------- | :---------------------------------------- |
