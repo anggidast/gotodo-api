@@ -14,10 +14,11 @@ func main() {
 	port := os.Getenv("PORT")	
 
 	config.NewDB()
-
+	
 	mux := http.NewServeMux()
   mux.HandleFunc("/plm/cors",routes.Cors)
-
+	http.ListenAndServe(":8081", mux)
+	
 	e.Logger.Fatal(e.Start(":"+port))
 }
 
