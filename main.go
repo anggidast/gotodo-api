@@ -8,7 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func main(c echo.Context) {
+func main() {
+	var c echo.Context
 	e := routes.Init(c)
 	port := os.Getenv("PORT")
 
