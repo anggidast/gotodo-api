@@ -51,6 +51,7 @@ func NewDB(params ...string) *gorm.DB {
 
 	sqlDB, _ := DB.DB()
 	sqlDB.SetMaxIdleConns(10)
+	// sqlDB.SetMaxOpenConns(10)
 
 	// Todo := models.Todo{}
 	// User := models.User{}
@@ -59,6 +60,8 @@ func NewDB(params ...string) *gorm.DB {
 
 	if err != nil {
 		sqlDB.Close()
+		gorm.Open(postgres.Open(conString), &gorm.Config{})
+
 		// log.Panic(err)
 	}
 
