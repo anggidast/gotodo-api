@@ -27,7 +27,7 @@ func Init() *echo.Echo {
 	config.NewDB()
 
 	// * define group, with group level middleware
-	todos := e.Group("/todos", middlewares.Authentication)
+	todos := e.Group("/todos", middlewares.Authentication, middleware.CORS())
 	todos.Use()
 
 	e.GET("/", func(c echo.Context) error { // * echo.Context for handle request and response
