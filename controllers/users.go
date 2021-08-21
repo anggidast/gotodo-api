@@ -27,6 +27,8 @@ func GetAllUsers(c echo.Context) (err error) {
 func Login(c echo.Context) (err error) {
 	req := new(models.User)
 	c.Request().Header.Set(echo.HeaderAccessControlAllowOrigin, "*")
+	c.Request().Header.Set(echo.HeaderAccessControlAllowHeaders, "*")
+	c.Request().Header.Set(echo.HeaderAccessControlRequestMethod, "*")
 
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
