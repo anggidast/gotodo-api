@@ -8,7 +8,7 @@ import (
 
 func setResponseACAOHeaderFromRequest(req http.Request, resp echo.Response) {
 	resp.Header().Set(echo.HeaderAccessControlAllowOrigin,
-		req.Header.Get(echo.HeaderOrigin))
+		req.Header.Get(echo.HeaderAccessControlAllowOrigin))
 }
 
 func ACAOHeaderOverwriteMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
