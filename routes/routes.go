@@ -13,9 +13,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Init(c echo.Context) *echo.Echo {
-	c.Request().Header.Set(echo.HeaderAccessControlAllowOrigin, "*")
-
+func Init() *echo.Echo {
 	e := echo.New()
 	e.Validator = &models.CustomValidator{
 		Validator: validator.New(),

@@ -4,12 +4,10 @@ import (
 	"go-fancy-todo/config"
 	"go-fancy-todo/routes"
 	"os"
-
-	"github.com/labstack/echo/v4"
 )
 
-func main(c echo.Context) {
-	e := routes.Init(c)
+func main() {
+	e := routes.Init()
 	port := os.Getenv("PORT")
 
 	config.NewDB()
