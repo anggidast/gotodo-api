@@ -49,15 +49,17 @@ func NewDB(params ...string) *gorm.DB {
 
 	DB, err := gorm.Open(postgres.Open(conString), &gorm.Config{})
 
+	sqlDB, _ := DB.DB()
+	sqlDB.SetMaxIdleConns(10)
+
 	// Todo := models.Todo{}
 	// User := models.User{}
 
 	// DB.AutoMigrate(&User, &Todo)
 
 	if err != nil {
-		sqlDB, _ := DB.DB()
 		sqlDB.Close()
-		log.Panic(err)
+		// log.Panic(err)
 	}
 
 	return DB
