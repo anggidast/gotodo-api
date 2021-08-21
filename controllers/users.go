@@ -72,6 +72,7 @@ func Login(c echo.Context) (err error) {
 
 	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	c.Response().WriteHeader(201)
+	config.CloseDB()
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message":      "succeed",
@@ -120,7 +121,7 @@ func Register(c echo.Context) (err error) {
 
 	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	c.Response().WriteHeader(201)
-return c.JSON(http.StatusCreated, response)
+	return c.JSON(http.StatusCreated, response)
 }
 
 func UpdateUser(c echo.Context) (err error) {
@@ -151,7 +152,7 @@ func UpdateUser(c echo.Context) (err error) {
 
 	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	c.Response().WriteHeader(201)
-return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, response)
 }
 
 func DeleteUser(c echo.Context) (err error) {

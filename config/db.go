@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"go-fancy-todo/models"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -49,18 +50,23 @@ func NewDB(params ...string) *gorm.DB {
 
 	DB, err := gorm.Open(postgres.Open(conString), &gorm.Config{})
 
-	sqlDB, _ := DB.DB()
-	sqlDB.Close()
-	gorm.Open(postgres.Open(conString), &gorm.Config{})
+	Todo := models.Todo{}
+	User := models.User{}
 
-	// Todo := models.Todo{}
-	// User := models.User{}
-
-	// DB.AutoMigrate(&User, &Todo)
+	DB.AutoMigrate(&User, &Todo)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
 	return DB
+}
+
+func CloseDB(params ...string) {
+	conString := GetPostgresConnectionString()
+
+	DB, _ := gorm.Open(postgres.Open(conString), &gorm.Config{})
+
+	sqlDB, _ := DB.DB()
+	sqlDB.Close()
 }
