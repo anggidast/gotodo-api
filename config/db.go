@@ -65,12 +65,3 @@ func NewDB(params ...string) *gorm.DB {
 func Database() *gorm.DB {
 	return DB
 }
-
-func CloseDB(params ...string) {
-	conString := GetPostgresConnectionString()
-
-	DB, _ := gorm.Open(postgres.Open(conString), &gorm.Config{})
-
-	sqlDB, _ := DB.DB()
-	sqlDB.Close()
-}

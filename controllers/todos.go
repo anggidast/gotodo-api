@@ -25,7 +25,7 @@ func dateValidation(due_date string) (err error) {
 }
 
 func GetAllTodos(c echo.Context) (err error) {
-	db := config.NewDB()
+	db := config.Database()
 	todos := []models.Todo{}
 
 	var userId string = strconv.Itoa(int(middlewares.UserId))
@@ -64,9 +64,8 @@ func AddTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	
 	var userId int = int(middlewares.UserId)
-	
+
 	newTodo := models.Todo{
 		Title:       req.Title,
 		Description: req.Description,
@@ -76,14 +75,12 @@ func AddTodo(c echo.Context) (err error) {
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-	
-	
+
 	if err = dateValidation(req.Due_date); err != nil {
 		return err
 	}
 
-	
-	db := config.NewDB()
+	db := config.Database()
 	db.Create(&newTodo)
 	response := models.TodoResponse{
 		Message: "created",

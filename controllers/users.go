@@ -14,7 +14,7 @@ import (
 )
 
 func GetAllUsers(c echo.Context) (err error) {
-	db := config.NewDB()
+	db := config.Database()
 	users := []models.User{}
 
 	if err = db.Find(&users).Error; err != nil {
@@ -89,7 +89,7 @@ func Register(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	db := config.NewDB()
+	db := config.Database()
 	user := models.User{}
 
 	if err = c.Validate(req); err != nil {
@@ -127,7 +127,7 @@ func Register(c echo.Context) (err error) {
 func UpdateUser(c echo.Context) (err error) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	db := config.NewDB()
+	db := config.Database()
 	user := models.User{}
 
 	if err = db.First(&user, id).Error; err != nil {
@@ -158,7 +158,7 @@ func UpdateUser(c echo.Context) (err error) {
 func DeleteUser(c echo.Context) (err error) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	db := config.NewDB()
+	db := config.Database()
 	user := models.User{}
 
 	if err = db.First(&user, id).Error; err != nil {
