@@ -41,7 +41,7 @@ var Authentication = middleware.JWTWithConfig(middleware.JWTConfig{
 })
 
 func Authorization(id string, c echo.Context) (todo models.Todo, userId string, db *gorm.DB, err error) {
-	db = config.NewDB()
+	db = config.Database()
 	todo = models.Todo{}
 
 	userId = strconv.Itoa(int(UserId))
