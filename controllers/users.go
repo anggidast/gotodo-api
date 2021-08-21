@@ -37,7 +37,7 @@ func Login(c echo.Context) (err error) {
 		return err
 	}
 
-	db := config.NewDB()
+	db := config.Database()
 	user := models.User{}
 
 	if err = db.First(&user, "email = ?", req.Email).Error; err != nil {
@@ -72,7 +72,7 @@ func Login(c echo.Context) (err error) {
 
 	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	c.Response().WriteHeader(201)
-	config.CloseDB()
+	// config.CloseDB()
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message":      "succeed",

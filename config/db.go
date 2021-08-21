@@ -48,7 +48,7 @@ func NewDB(params ...string) *gorm.DB {
 
 	log.Print(conString)
 
-	DB, err := gorm.Open(postgres.Open(conString), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(conString), &gorm.Config{})
 
 	Todo := models.Todo{}
 	User := models.User{}
@@ -59,6 +59,10 @@ func NewDB(params ...string) *gorm.DB {
 		log.Panic(err)
 	}
 
+	return DB
+}
+
+func Database() *gorm.DB {
 	return DB
 }
 
