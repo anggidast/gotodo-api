@@ -146,10 +146,6 @@ func ChangeStatus(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err = c.Validate(req); err != nil {
-		return err
-	}
-
 	todo.Status = req.Status
 
 	db.Save(&todo)
