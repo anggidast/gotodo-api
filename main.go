@@ -6,12 +6,14 @@ import (
 	"os"
 )
 
+
+
 func main() {
 	e := routes.Init()
 	port := os.Getenv("PORT")	
 
 	config.NewDB()
-
+	
 	e.Logger.Fatal(e.Start(":"+port))
 }
 
