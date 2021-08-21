@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-
-
 func main() {
 	e := routes.Init()
 	port := os.Getenv("PORT")	
