@@ -18,10 +18,10 @@ func Init() *echo.Echo {
 	e.Validator = &models.CustomValidator{
 		Validator: validator.New(),
 	}
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	e.Use(middlewares.ACAOHeaderOverwriteMiddleware, middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		// AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 	config.NewDB()
 
@@ -49,4 +49,3 @@ func Init() *echo.Echo {
 
 	return e
 }
-
