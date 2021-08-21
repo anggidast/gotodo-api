@@ -64,6 +64,10 @@ func AddTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	if err = c.Validate(req); err != nil {
+		return err
+	}
+
 	var userId int = int(middlewares.UserId)
 
 	newTodo := models.Todo{
@@ -103,6 +107,10 @@ func UpdateTodo(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	if err = c.Validate(req); err != nil {
+		return err
+	}
+
 	userIdInt, _ := strconv.Atoi(userId)
 
 	todo.Title = req.Title
@@ -136,6 +144,10 @@ func ChangeStatus(c echo.Context) (err error) {
 	req := new(models.Todo)
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err = c.Validate(req); err != nil {
+		return err
 	}
 
 	todo.Status = req.Status
