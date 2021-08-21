@@ -21,7 +21,7 @@ func Init() *echo.Echo {
 	e.Use(middlewares.ACAOHeaderOverwriteMiddleware, middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
-		// AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 	config.NewDB()
 
@@ -46,6 +46,8 @@ func Init() *echo.Echo {
 	e.POST("/users/register", controllers.Register)
 	e.PUT("/user/:id", controllers.UpdateUser)
 	e.DELETE("/user/:id", controllers.DeleteUser)
+
+	e.OPTIONS("/users/login", controllers.Login)
 
 	return e
 }
