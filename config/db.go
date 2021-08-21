@@ -51,7 +51,7 @@ func NewDB(params ...string) *gorm.DB {
 
 	sqlDB, _ := DB.DB()
 	sqlDB.SetMaxIdleConns(10)
-	// sqlDB.SetMaxOpenConns(10)
+	sqlDB.SetMaxOpenConns(10)
 
 	// Todo := models.Todo{}
 	// User := models.User{}
