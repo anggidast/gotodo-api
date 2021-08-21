@@ -26,7 +26,6 @@ func GetAllUsers(c echo.Context) (err error) {
 
 func Login(c echo.Context) (err error) {
 	req := new(models.User)
-	c.Request().Header.Set(echo.HeaderAccessControlAllowOrigin, "*")
 
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -67,8 +66,6 @@ func Login(c echo.Context) (err error) {
 	}
 
 	// * send it as response
-
-	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message":      "succeed",
 		"user_id":      user.ID,
@@ -77,8 +74,6 @@ func Login(c echo.Context) (err error) {
 }
 
 func Register(c echo.Context) (err error) {
-	c.Request().Header.Set(echo.HeaderAccessControlAllowOrigin, "*")
-
 	req := new(models.User)
 	if err = c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -114,7 +109,6 @@ func Register(c echo.Context) (err error) {
 		Data:    models.UserInfo{ID: newUser.ID, Email: req.Email},
 	}
 
-	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	return c.JSON(http.StatusCreated, response)
 }
 
@@ -144,7 +138,6 @@ func UpdateUser(c echo.Context) (err error) {
 		Data:    models.UserInfo{ID: user.ID, Email: user.Email},
 	}
 
-	c.Response().Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
 	return c.JSON(http.StatusOK, response)
 }
 

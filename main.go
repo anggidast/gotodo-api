@@ -11,7 +11,7 @@ func main() {
 	port := os.Getenv("PORT")	
 
 	config.NewDB()
-	
+
 	e.Logger.Fatal(e.Start(":"+port))
 }
 

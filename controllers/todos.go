@@ -17,7 +17,7 @@ func dateValidation(due_date string) (err error) {
 
 	today := time.Now()
 	if due.Format("2006-01-02") < today.Format("2006-01-02") {
-		err = errors.New("due date cannot be the day before today")
+		err = errors.New("validation_error: Due date cannot be the day before today")
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
