@@ -55,6 +55,8 @@ func NewDB(params ...string) *gorm.DB {
 	// DB.AutoMigrate(&User, &Todo)
 
 	if err != nil {
+		sqlDB, _ := DB.DB()
+		sqlDB.Close()
 		log.Panic(err)
 	}
 
